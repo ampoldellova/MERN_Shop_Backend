@@ -5,5 +5,6 @@ const {getProducts,newProduct, getSingleProduct, updateProduct, deleteProduct} =
 
 router.get('/products', getProducts)
 router.post('/product/new', newProduct)
+router.get('/product/:id', getSingleProduct);
 
 module.exports = router;
