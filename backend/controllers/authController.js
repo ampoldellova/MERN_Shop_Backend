@@ -21,3 +21,6 @@ exports.registerUser = async (req, res, next) => {
     })
     sendToken(user, 200, res)
 }
+
+exports.loginUser = async (req, res, next) => {
+}
