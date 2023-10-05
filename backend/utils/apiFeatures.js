@@ -4,6 +4,7 @@ class APIFeatures {
         this.queryStr = queryStr;
     }
 
+    // http://localhost:4001/api/v1/products?keywords=?
     search() {
         const keyword = this.queryStr.keyword ? {
             name: {
@@ -32,6 +33,8 @@ class APIFeatures {
         return this;
     }
 
+    // http://localhost:4001/api/v1/products?keywords=?&page=?
+    // http://localhost:4001/api/v1/products?page=?
     pagination(resPerPage) {
         const currentPage = Number(this.queryStr.page) || 1;
         const skip = resPerPage * (currentPage - 1);
