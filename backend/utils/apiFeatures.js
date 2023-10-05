@@ -16,8 +16,7 @@ class APIFeatures {
         return this;
     }
 
-     filter() {
-
+    filter() {
         const queryCopy = { ...this.queryStr };
         console.log(queryCopy);
         // Removing fields from the query
@@ -41,4 +40,5 @@ class APIFeatures {
         return this;
     }
 }
-module.exports = APIFeatures
+
+module.exports = APIFeatures;
