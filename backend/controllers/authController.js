@@ -1,9 +1,6 @@
 const User = require('../models/users');
 const sendToken = require('../utils/jwtToken');
-const sendEmail = require('../utils/sendEmail');
-const crypto = require('crypto')
 const cloudinary = require('cloudinary')
-
 exports.registerUser = async (req, res, next) => {
     const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
         folder: 'avatars',
@@ -158,12 +155,10 @@ exports.getUserProfile = async (req, res, next) => {
 
 exports.updatePassword = async (req, res, next) => {
     const user = await User.findById(req.user.id).select('password');
-
     // Check previous user password
     const isMatched = await user.comparePassword(req.body.oldPassword)
     if (!isMatched) {
         return res.status(400).json({ message: 'Old password is incorrect' })
-        
     }
     user.password = req.body.password;
     await user.save();
@@ -208,7 +203,6 @@ exports.updateProfile = async (req, res, next) => {
 
 exports.allUsers = async (req, res, next) => {
     const users = await User.find();
-
     res.status(200).json({
         success: true,
         users
