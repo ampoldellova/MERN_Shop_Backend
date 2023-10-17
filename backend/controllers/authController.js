@@ -2,27 +2,38 @@ const User = require('../models/users');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
 const crypto = require('crypto')
+const cloudinary = require('cloudinary')
 
 exports.registerUser = async (req, res, next) => {
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: 'avatars',
+        width: 150,
+        crop: "scale"
+    }, (err, res) => {
+        console.log(err, res);
+    });
     const { name, email, password, role } = req.body;
     const user = await User.create({
         name,
         email,
         password,
         avatar: {
-            public_id: 'avatars/hsdfl66pg2mpvp5irfqy',
-            url: 'https://res.cloudinary.com/dgneiaky7/image/upload/v1680144230/avatars/hsdfl66pg2mpvp5irfqy.jpg'
+            public_id: result.public_id,
+            url: result.secure_url
         },
-        role,
+
+        // role,
     })
-    //test token
+
     // const token = user.getJwtToken();
-    // res.status(201).json({
-    //     success: true,
-    //     user,
-    //     token
-    // })
+    if (!user) {
+        return res.status(500).json({
+            success: false,
+            message: 'user not created'
+        })
+    }
     sendToken(user, 200, res)
+
 }
 
 exports.loginUser = async (req, res, next) => {
