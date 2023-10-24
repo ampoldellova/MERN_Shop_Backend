@@ -15,16 +15,16 @@ const { registerUser,
     allUsers,
     getUserDetails } = require('../controllers/authController');
 
-router.post('/register', registerUser);
+router.post('/register', upload.single("avatar"), registerUser);
 router.post('/login', loginUser);
 router.get('/logout', logout);
 
 router.post('/password/forgot', forgotPassword);
 router.put('/password/reset/:token', resetPassword);
 router.get('/me', isAuthenticatedUser, getUserProfile)
-router.put('/password/update', isAuthenticatedUser,upload.single("avatar"), updatePassword)
-router.put('/me/update', updateProfile, upload.single("avatar"))
+router.put('/password/update', isAuthenticatedUser, updatePassword)
+router.put('/me/update', isAuthenticatedUser, upload.single("avatar"), updateProfile)
 router.get('/admin/users', allUsers)
-router.get('/admin/user/:id', getUserDetails )
+router.get('/admin/user/:id', getUserDetails)
 
 module.exports = router;
