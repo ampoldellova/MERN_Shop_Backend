@@ -102,11 +102,48 @@ exports.deleteOrder = async (req, res, next) => {
 
     if (!order) {
         return res.status(404).json({ message: `No Order found with this ID` })
-     
+
     }
     await order.remove()
 
     res.status(200).json({
         success: true
     })
+}
+
+exports.customerSales = async (req, res, next) => {
+    const customerSales = await Order.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'user',
+                foreignField: '_id',
+                as: 'userDetails'
+            },
+        },
+
+        { $unwind: "$userDetails" },
+
+        {
+            $group: {
+                _id: "$userDetails.name",
+                total: { $sum: "$totalPrice" }
+            }
+        },
+
+        { $sort: { total: -1 } },
+
+    ])
+    console.log(customerSales)
+    if (!customerSales) {
+        return res.status(404).json({
+            message: 'error customer sales',
+        })
+    }
+    // return console.log(customerSales)
+    res.status(200).json({
+        success: true,
+        customerSales
+    })
+
 }
